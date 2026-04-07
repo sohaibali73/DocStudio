@@ -9,10 +9,7 @@ import {
   FileText,
   Presentation,
   Table2,
-  MoreVertical,
   Search,
-  Clock,
-  Star,
   Send,
   Wand2,
   PenLine,
@@ -21,6 +18,7 @@ import {
   ListChecks,
   Lightbulb,
   X,
+  Plus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,26 +42,18 @@ const tabs = [
 ];
 
 const aiPrompts = [
-  { icon: PenLine, label: "Write content", description: "Generate text based on a prompt" },
-  { icon: Wand2, label: "Improve writing", description: "Enhance clarity and tone" },
-  { icon: Languages, label: "Translate", description: "Convert to another language" },
-  { icon: CheckCircle, label: "Fix grammar", description: "Correct spelling and grammar" },
-  { icon: ListChecks, label: "Summarize", description: "Create a brief summary" },
-  { icon: Lightbulb, label: "Brainstorm", description: "Generate ideas and suggestions" },
-];
-
-const recentFiles = [
-  { name: "Q4 Report.docx", type: "docx" as const, time: "2 hours ago", starred: true },
-  { name: "Marketing Deck.pptx", type: "pptx" as const, time: "Yesterday", starred: false },
-  { name: "Budget 2024.xlsx", type: "xlsx" as const, time: "2 days ago", starred: true },
-  { name: "Meeting Notes.docx", type: "docx" as const, time: "3 days ago", starred: false },
-  { name: "Product Roadmap.pptx", type: "pptx" as const, time: "Last week", starred: false },
+  { icon: PenLine, label: "Write", description: "Generate content" },
+  { icon: Wand2, label: "Improve", description: "Enhance writing" },
+  { icon: Languages, label: "Translate", description: "Change language" },
+  { icon: CheckCircle, label: "Fix", description: "Grammar check" },
+  { icon: ListChecks, label: "Summarize", description: "Brief summary" },
+  { icon: Lightbulb, label: "Ideas", description: "Brainstorm" },
 ];
 
 const fileIcons = {
-  docx: { icon: FileText, color: "text-blue-400" },
-  pptx: { icon: Presentation, color: "text-orange-400" },
-  xlsx: { icon: Table2, color: "text-green-400" },
+  docx: { icon: FileText, color: "text-blue-400", bgColor: "bg-blue-500/10" },
+  pptx: { icon: Presentation, color: "text-orange-400", bgColor: "bg-orange-500/10" },
+  xlsx: { icon: Table2, color: "text-emerald-400", bgColor: "bg-emerald-500/10" },
 };
 
 export function RightPanel({ isOpen, onToggle, activeTab, setActiveTab }: RightPanelProps) {
@@ -72,13 +62,17 @@ export function RightPanel({ isOpen, onToggle, activeTab, setActiveTab }: RightP
       {/* Panel */}
       <aside
         className={cn(
-          "fixed right-0 top-0 z-40 flex h-full flex-col border-l border-glass-border bg-glass backdrop-blur-xl transition-all duration-300 lg:relative",
+          "fixed right-0 top-0 z-40 flex h-full flex-col transition-all duration-300 lg:relative",
+          "border-l border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.02] backdrop-blur-2xl",
           isOpen ? "w-80 translate-x-0" : "w-0 translate-x-full"
         )}
       >
+        {/* Subtle inner glow */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-bl from-primary/[0.03] via-transparent to-transparent" />
+        
         {/* Panel Header */}
-        <div className="flex h-16 items-center justify-between border-b border-glass-border px-4">
-          <div className="flex items-center gap-1 rounded-lg bg-secondary/50 p-1">
+        <div className="relative flex h-16 items-center justify-between border-b border-white/[0.06] px-4">
+          <div className="flex items-center gap-1 rounded-lg bg-white/[0.04] p-1">
             {tabs.map((tab) => (
               <Button
                 key={tab.id}
@@ -86,8 +80,8 @@ export function RightPanel({ isOpen, onToggle, activeTab, setActiveTab }: RightP
                 size="sm"
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "gap-2 text-muted-foreground",
-                  activeTab === tab.id && "bg-glass-hover text-foreground"
+                  "gap-2 text-muted-foreground/60 hover:bg-white/[0.06] hover:text-foreground",
+                  activeTab === tab.id && "bg-white/[0.08] text-foreground"
                 )}
               >
                 <tab.icon className="h-4 w-4" />
@@ -99,14 +93,14 @@ export function RightPanel({ isOpen, onToggle, activeTab, setActiveTab }: RightP
             variant="ghost"
             size="icon"
             onClick={onToggle}
-            className="text-muted-foreground hover:text-foreground lg:hidden"
+            className="text-muted-foreground/60 hover:bg-white/[0.05] hover:text-foreground lg:hidden"
           >
             <X className="h-4 w-4" />
           </Button>
         </div>
 
         {/* Panel Content */}
-        <ScrollArea className="flex-1">
+        <ScrollArea className="relative flex-1">
           {activeTab === "ai" && <AIPanel />}
           {activeTab === "files" && <FilesPanel />}
           {activeTab === "settings" && <SettingsPanel />}
@@ -116,7 +110,7 @@ export function RightPanel({ isOpen, onToggle, activeTab, setActiveTab }: RightP
       {/* Mobile Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-30 bg-background/60 backdrop-blur-md lg:hidden"
           onClick={onToggle}
         />
       )}
@@ -129,68 +123,66 @@ function AIPanel() {
     <div className="flex flex-col p-4">
       {/* AI Chat Input */}
       <div className="mb-6">
-        <div className="relative">
+        <div className="relative overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.03]">
           <Textarea
-            placeholder="Ask AI to help you write, edit, or improve your document..."
-            className="min-h-24 resize-none border-glass-border bg-secondary/50 pr-12 placeholder:text-muted-foreground focus-visible:ring-primary"
+            placeholder="Ask AI to help you write, edit, or improve..."
+            className="min-h-24 resize-none border-0 bg-transparent pr-12 placeholder:text-muted-foreground/40 focus-visible:ring-0"
           />
           <Button
             size="icon"
-            className="absolute bottom-2 right-2 h-8 w-8 bg-primary text-primary-foreground hover:bg-primary/90"
+            className={cn(
+              "absolute bottom-2 right-2 h-8 w-8",
+              "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground",
+              "shadow-[0_0_15px_rgba(45,212,191,0.2)] hover:shadow-[0_0_20px_rgba(45,212,191,0.3)]"
+            )}
           >
             <Send className="h-4 w-4" />
           </Button>
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">
-          Press Enter to send, Shift+Enter for new line
+        <p className="mt-2 text-xs text-muted-foreground/40">
+          Press Enter to send
         </p>
       </div>
 
       {/* Quick Actions */}
       <div className="mb-4">
-        <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <h3 className="mb-3 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/50">
           Quick Actions
         </h3>
         <div className="grid grid-cols-2 gap-2">
           {aiPrompts.map((prompt) => (
             <button
               key={prompt.label}
-              className="flex flex-col items-start gap-1 rounded-lg border border-glass-border bg-secondary/30 p-3 text-left transition-all hover:border-primary/50 hover:bg-glass-hover"
+              className={cn(
+                "group flex flex-col items-start gap-1 rounded-xl p-3 text-left transition-all",
+                "border border-white/[0.06] bg-white/[0.02]",
+                "hover:border-primary/30 hover:bg-white/[0.04]"
+              )}
             >
-              <prompt.icon className="h-4 w-4 text-primary" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
+                <prompt.icon className="h-4 w-4" />
+              </div>
               <span className="text-sm font-medium text-foreground">{prompt.label}</span>
-              <span className="text-xs text-muted-foreground line-clamp-1">{prompt.description}</span>
+              <span className="text-[11px] text-muted-foreground/50">{prompt.description}</span>
             </button>
           ))}
         </div>
       </div>
 
-      <Separator className="my-4 bg-glass-border" />
+      <Separator className="my-4 bg-white/[0.06]" />
 
-      {/* AI Suggestions */}
+      {/* AI Suggestions - Empty State */}
       <div>
-        <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <h3 className="mb-3 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/50">
           Suggestions
         </h3>
-        <div className="space-y-2">
-          <div className="rounded-lg border border-glass-border bg-secondary/30 p-3">
-            <div className="mb-2 flex items-center gap-2">
-              <Lightbulb className="h-4 w-4 text-chart-3" />
-              <span className="text-sm font-medium text-foreground">Add an introduction</span>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Your document could benefit from a brief introduction paragraph.
-            </p>
+        <div className="rounded-xl border border-dashed border-white/[0.08] bg-white/[0.01] p-6 text-center">
+          <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+            <Lightbulb className="h-5 w-5 text-primary" />
           </div>
-          <div className="rounded-lg border border-glass-border bg-secondary/30 p-3">
-            <div className="mb-2 flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-400" />
-              <span className="text-sm font-medium text-foreground">Improve readability</span>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Some sentences are quite long. Consider breaking them up.
-            </p>
-          </div>
+          <p className="text-sm text-muted-foreground/60">
+            AI suggestions will appear here as you work on your document.
+          </p>
         </div>
       </div>
     </div>
@@ -202,81 +194,81 @@ function FilesPanel() {
     <div className="flex flex-col p-4">
       {/* Search */}
       <div className="relative mb-4">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/40" />
         <Input
           placeholder="Search files..."
-          className="h-10 border-glass-border bg-secondary/50 pl-9 placeholder:text-muted-foreground focus-visible:ring-primary"
+          className="h-10 border-white/[0.08] bg-white/[0.03] pl-9 placeholder:text-muted-foreground/40 focus-visible:border-primary/50 focus-visible:ring-primary/20"
         />
       </div>
 
-      {/* Quick Filters */}
-      <div className="mb-4 flex gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-1 border-glass-border bg-secondary/50 text-muted-foreground hover:bg-glass-hover hover:text-foreground"
-        >
-          <Clock className="h-3 w-3" />
-          Recent
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-1 border-glass-border bg-secondary/50 text-muted-foreground hover:bg-glass-hover hover:text-foreground"
-        >
-          <Star className="h-3 w-3" />
-          Starred
-        </Button>
-      </div>
-
-      {/* File List */}
-      <div className="space-y-1">
-        {recentFiles.map((file, index) => {
-          const FileIcon = fileIcons[file.type];
-          return (
-            <button
-              key={index}
-              className="group flex w-full items-center gap-3 rounded-lg p-2 text-left transition-all hover:bg-glass-hover"
-            >
-              <div
+      {/* Document Types */}
+      <div className="mb-4">
+        <h3 className="mb-3 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/50">
+          Create New
+        </h3>
+        <div className="grid grid-cols-3 gap-2">
+          {Object.entries(fileIcons).map(([type, config]) => {
+            const Icon = config.icon;
+            return (
+              <button
+                key={type}
                 className={cn(
-                  "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-glass-border bg-secondary/50",
-                  FileIcon.color
+                  "flex flex-col items-center gap-2 rounded-xl p-3 transition-all",
+                  "border border-white/[0.06] bg-white/[0.02]",
+                  "hover:border-primary/30 hover:bg-white/[0.04]"
                 )}
               >
-                <FileIcon.icon className="h-4 w-4" />
-              </div>
-              <div className="flex-1 overflow-hidden">
-                <p className="truncate text-sm font-medium text-foreground">{file.name}</p>
-                <p className="text-xs text-muted-foreground">{file.time}</p>
-              </div>
-              <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                {file.starred && <Star className="h-3 w-3 fill-chart-3 text-chart-3" />}
-                <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground">
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </div>
-            </button>
-          );
-        })}
+                <div className={cn("flex h-10 w-10 items-center justify-center rounded-lg", config.bgColor)}>
+                  <Icon className={cn("h-5 w-5", config.color)} />
+                </div>
+                <span className="text-xs text-muted-foreground/70 capitalize">{type}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <Separator className="my-4 bg-glass-border" />
+      <Separator className="my-4 bg-white/[0.06]" />
+
+      {/* Empty Files State */}
+      <div>
+        <h3 className="mb-3 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/50">
+          Recent Files
+        </h3>
+        <div className="rounded-xl border border-dashed border-white/[0.08] bg-white/[0.01] p-6 text-center">
+          <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.05]">
+            <FolderOpen className="h-5 w-5 text-muted-foreground/50" />
+          </div>
+          <p className="mb-3 text-sm text-muted-foreground/60">
+            No recent files yet
+          </p>
+          <Button
+            size="sm"
+            variant="outline"
+            className="gap-2 border-white/[0.1] bg-white/[0.02] text-muted-foreground hover:bg-white/[0.05] hover:text-foreground"
+          >
+            <Plus className="h-4 w-4" />
+            Create your first document
+          </Button>
+        </div>
+      </div>
+
+      <Separator className="my-4 bg-white/[0.06]" />
 
       {/* Folders */}
       <div>
-        <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <h3 className="mb-3 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/50">
           Folders
         </h3>
         <div className="space-y-1">
           {["Projects", "Personal", "Shared", "Archive"].map((folder) => (
             <button
               key={folder}
-              className="group flex w-full items-center gap-3 rounded-lg p-2 text-left transition-all hover:bg-glass-hover"
+              className="group flex w-full items-center gap-3 rounded-lg p-2 text-left transition-all hover:bg-white/[0.05]"
             >
-              <FolderOpen className="h-4 w-4 text-muted-foreground" />
-              <span className="flex-1 text-sm text-foreground">{folder}</span>
-              <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+              <FolderOpen className="h-4 w-4 text-muted-foreground/50" />
+              <span className="flex-1 text-sm text-muted-foreground/70">{folder}</span>
+              <ChevronRight className="h-4 w-4 text-muted-foreground/30 opacity-0 transition-opacity group-hover:opacity-100" />
             </button>
           ))}
         </div>
@@ -290,30 +282,30 @@ function SettingsPanel() {
     <div className="flex flex-col p-4">
       {/* Document Settings */}
       <div className="mb-6">
-        <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <h3 className="mb-3 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/50">
           Document Settings
         </h3>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <Label htmlFor="auto-save" className="text-sm text-foreground">
+            <Label htmlFor="auto-save" className="text-sm text-muted-foreground/80">
               Auto-save
             </Label>
             <Switch id="auto-save" defaultChecked />
           </div>
           <div className="flex items-center justify-between">
-            <Label htmlFor="spell-check" className="text-sm text-foreground">
+            <Label htmlFor="spell-check" className="text-sm text-muted-foreground/80">
               Spell check
             </Label>
             <Switch id="spell-check" defaultChecked />
           </div>
           <div className="flex items-center justify-between">
-            <Label htmlFor="grammar-check" className="text-sm text-foreground">
+            <Label htmlFor="grammar-check" className="text-sm text-muted-foreground/80">
               Grammar check
             </Label>
             <Switch id="grammar-check" defaultChecked />
           </div>
           <div className="flex items-center justify-between">
-            <Label htmlFor="word-count" className="text-sm text-foreground">
+            <Label htmlFor="word-count" className="text-sm text-muted-foreground/80">
               Show word count
             </Label>
             <Switch id="word-count" />
@@ -321,17 +313,17 @@ function SettingsPanel() {
         </div>
       </div>
 
-      <Separator className="mb-6 bg-glass-border" />
+      <Separator className="mb-6 bg-white/[0.06]" />
 
       {/* Page Setup */}
       <div className="mb-6">
-        <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <h3 className="mb-3 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/50">
           Page Setup
         </h3>
         <div className="space-y-3">
           <div>
-            <Label className="mb-1.5 block text-sm text-muted-foreground">Page Size</Label>
-            <select className="w-full rounded-lg border border-glass-border bg-secondary/50 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-primary">
+            <Label className="mb-1.5 block text-sm text-muted-foreground/60">Page Size</Label>
+            <select className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20">
               <option>Letter (8.5 x 11 in)</option>
               <option>A4 (210 x 297 mm)</option>
               <option>Legal (8.5 x 14 in)</option>
@@ -339,27 +331,27 @@ function SettingsPanel() {
             </select>
           </div>
           <div>
-            <Label className="mb-1.5 block text-sm text-muted-foreground">Orientation</Label>
+            <Label className="mb-1.5 block text-sm text-muted-foreground/60">Orientation</Label>
             <div className="flex gap-2">
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 border-primary bg-primary/10 text-primary"
+                className="flex-1 border-primary/50 bg-primary/10 text-primary hover:bg-primary/15"
               >
                 Portrait
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 border-glass-border text-muted-foreground hover:bg-glass-hover"
+                className="flex-1 border-white/[0.1] text-muted-foreground/70 hover:bg-white/[0.05] hover:text-foreground"
               >
                 Landscape
               </Button>
             </div>
           </div>
           <div>
-            <Label className="mb-1.5 block text-sm text-muted-foreground">Margins</Label>
-            <select className="w-full rounded-lg border border-glass-border bg-secondary/50 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-primary">
+            <Label className="mb-1.5 block text-sm text-muted-foreground/60">Margins</Label>
+            <select className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20">
               <option>Normal (1 in)</option>
               <option>Narrow (0.5 in)</option>
               <option>Wide (1.5 in)</option>
@@ -369,29 +361,29 @@ function SettingsPanel() {
         </div>
       </div>
 
-      <Separator className="mb-6 bg-glass-border" />
+      <Separator className="mb-6 bg-white/[0.06]" />
 
       {/* AI Settings */}
       <div>
-        <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <h3 className="mb-3 text-[11px] font-medium uppercase tracking-widest text-muted-foreground/50">
           AI Assistant
         </h3>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <Label htmlFor="ai-suggestions" className="text-sm text-foreground">
+            <Label htmlFor="ai-suggestions" className="text-sm text-muted-foreground/80">
               AI suggestions
             </Label>
             <Switch id="ai-suggestions" defaultChecked />
           </div>
           <div className="flex items-center justify-between">
-            <Label htmlFor="ai-autocomplete" className="text-sm text-foreground">
+            <Label htmlFor="ai-autocomplete" className="text-sm text-muted-foreground/80">
               AI autocomplete
             </Label>
             <Switch id="ai-autocomplete" />
           </div>
           <div>
-            <Label className="mb-1.5 block text-sm text-muted-foreground">Writing Style</Label>
-            <select className="w-full rounded-lg border border-glass-border bg-secondary/50 px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-primary">
+            <Label className="mb-1.5 block text-sm text-muted-foreground/60">Writing Style</Label>
+            <select className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20">
               <option>Professional</option>
               <option>Casual</option>
               <option>Academic</option>

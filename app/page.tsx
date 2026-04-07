@@ -15,11 +15,16 @@ export default function DocumentStudio() {
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">
-      {/* Ambient background glow */}
+      {/* Ambient background effects */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -left-32 -top-32 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-chart-2/10 blur-3xl" />
-        <div className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-chart-3/5 blur-3xl" />
+        {/* Primary glow */}
+        <div className="absolute -left-64 -top-64 h-[600px] w-[600px] rounded-full bg-primary/[0.08] blur-[120px]" />
+        {/* Secondary glow */}
+        <div className="absolute -bottom-64 -right-64 h-[600px] w-[600px] rounded-full bg-chart-2/[0.06] blur-[120px]" />
+        {/* Center subtle glow */}
+        <div className="absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-chart-3/[0.03] blur-[100px]" />
+        {/* Noise texture overlay */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMC4wMyIvPjwvc3ZnPg==')] opacity-50" />
       </div>
 
       {/* Mobile Navigation */}

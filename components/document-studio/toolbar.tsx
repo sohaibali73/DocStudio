@@ -59,17 +59,17 @@ interface ToolbarProps {
 }
 
 const documentInfo = {
-  docx: { label: "Document", icon: FileText, color: "text-blue-400" },
-  pptx: { label: "Presentation", icon: Presentation, color: "text-orange-400" },
-  xlsx: { label: "Spreadsheet", icon: Table2, color: "text-green-400" },
+  docx: { label: "Document", icon: FileText, color: "text-blue-400", bgColor: "bg-blue-500/10" },
+  pptx: { label: "Presentation", icon: Presentation, color: "text-orange-400", bgColor: "bg-orange-500/10" },
+  xlsx: { label: "Spreadsheet", icon: Table2, color: "text-emerald-400", bgColor: "bg-emerald-500/10" },
 };
 
 const documentTools = {
   docx: [
     { group: "text", items: [
-      { icon: Bold, label: "Bold", shortcut: "⌘B" },
-      { icon: Italic, label: "Italic", shortcut: "⌘I" },
-      { icon: Underline, label: "Underline", shortcut: "⌘U" },
+      { icon: Bold, label: "Bold", shortcut: "Ctrl+B" },
+      { icon: Italic, label: "Italic", shortcut: "Ctrl+I" },
+      { icon: Underline, label: "Underline", shortcut: "Ctrl+U" },
     ]},
     { group: "align", items: [
       { icon: AlignLeft, label: "Align Left" },
@@ -82,16 +82,16 @@ const documentTools = {
       { icon: ListOrdered, label: "Numbered List" },
     ]},
     { group: "insert", items: [
-      { icon: Link2, label: "Insert Link", shortcut: "⌘K" },
+      { icon: Link2, label: "Insert Link", shortcut: "Ctrl+K" },
       { icon: Image, label: "Insert Image" },
       { icon: Table, label: "Insert Table" },
     ]},
   ],
   pptx: [
     { group: "text", items: [
-      { icon: Bold, label: "Bold", shortcut: "⌘B" },
-      { icon: Italic, label: "Italic", shortcut: "⌘I" },
-      { icon: Underline, label: "Underline", shortcut: "⌘U" },
+      { icon: Bold, label: "Bold", shortcut: "Ctrl+B" },
+      { icon: Italic, label: "Italic", shortcut: "Ctrl+I" },
+      { icon: Underline, label: "Underline", shortcut: "Ctrl+U" },
     ]},
     { group: "design", items: [
       { icon: Type, label: "Text Box" },
@@ -106,9 +106,9 @@ const documentTools = {
   ],
   xlsx: [
     { group: "text", items: [
-      { icon: Bold, label: "Bold", shortcut: "⌘B" },
-      { icon: Italic, label: "Italic", shortcut: "⌘I" },
-      { icon: Underline, label: "Underline", shortcut: "⌘U" },
+      { icon: Bold, label: "Bold", shortcut: "Ctrl+B" },
+      { icon: Italic, label: "Italic", shortcut: "Ctrl+I" },
+      { icon: Underline, label: "Underline", shortcut: "Ctrl+U" },
     ]},
     { group: "cell", items: [
       { icon: Grid3X3, label: "Merge Cells" },
@@ -130,7 +130,7 @@ export function Toolbar({ activeDocument, sidebarOpen, setSidebarOpen, rightPane
 
   return (
     <TooltipProvider delayDuration={200}>
-      <div className="flex flex-col border-b border-glass-border bg-glass/50 backdrop-blur-xl">
+      <div className="flex flex-col border-b border-white/[0.06] bg-gradient-to-r from-white/[0.03] via-white/[0.02] to-white/[0.03] backdrop-blur-2xl">
         {/* Top Bar */}
         <div className="flex h-14 items-center justify-between gap-4 px-4">
           <div className="flex items-center gap-3">
@@ -139,21 +139,24 @@ export function Toolbar({ activeDocument, sidebarOpen, setSidebarOpen, rightPane
               variant="ghost"
               size="icon"
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="hidden text-muted-foreground hover:text-foreground lg:flex"
+              className="hidden text-muted-foreground/60 hover:bg-white/[0.05] hover:text-foreground lg:flex"
             >
               <PanelLeft className="h-4 w-4" />
             </Button>
 
             {/* Document Type Badge */}
-            <div className="flex items-center gap-2 rounded-lg border border-glass-border bg-secondary/50 px-3 py-1.5">
+            <div className={cn(
+              "flex items-center gap-2 rounded-lg border border-white/[0.08] px-3 py-1.5",
+              info.bgColor
+            )}>
               <info.icon className={cn("h-4 w-4", info.color)} />
               <span className="text-sm font-medium text-foreground">{info.label}</span>
             </div>
 
             {/* Document Title */}
             <div className="hidden md:block">
-              <h1 className="text-sm font-medium text-foreground">Untitled Document</h1>
-              <p className="text-xs text-muted-foreground">Edited just now</p>
+              <h1 className="text-sm font-medium text-foreground">Untitled</h1>
+              <p className="text-xs text-muted-foreground/50">Ready to edit</p>
             </div>
           </div>
 
@@ -163,7 +166,12 @@ export function Toolbar({ activeDocument, sidebarOpen, setSidebarOpen, rightPane
             <Button
               variant="outline"
               size="sm"
-              className="hidden gap-2 border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary sm:flex"
+              className={cn(
+                "hidden gap-2 sm:flex",
+                "border-primary/30 bg-primary/10 text-primary",
+                "shadow-[0_0_15px_rgba(45,212,191,0.1)]",
+                "hover:border-primary/50 hover:bg-primary/15 hover:shadow-[0_0_20px_rgba(45,212,191,0.2)]"
+              )}
             >
               <Sparkles className="h-4 w-4" />
               <span>AI Assist</span>
@@ -173,44 +181,44 @@ export function Toolbar({ activeDocument, sidebarOpen, setSidebarOpen, rightPane
             <div className="hidden items-center gap-1 md:flex">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                  <Button variant="ghost" size="icon" className="text-muted-foreground/60 hover:bg-white/[0.05] hover:text-foreground">
                     <Undo2 className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Undo (⌘Z)</TooltipContent>
+                <TooltipContent className="border-white/10 bg-card/95 backdrop-blur-xl">Undo (Ctrl+Z)</TooltipContent>
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                  <Button variant="ghost" size="icon" className="text-muted-foreground/60 hover:bg-white/[0.05] hover:text-foreground">
                     <Redo2 className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Redo (⌘⇧Z)</TooltipContent>
+                <TooltipContent className="border-white/10 bg-card/95 backdrop-blur-xl">Redo (Ctrl+Shift+Z)</TooltipContent>
               </Tooltip>
             </div>
 
-            <Separator orientation="vertical" className="hidden h-6 bg-glass-border md:block" />
+            <Separator orientation="vertical" className="hidden h-6 bg-white/[0.08] md:block" />
 
             {/* Share & Export */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                <Button variant="ghost" size="icon" className="text-muted-foreground/60 hover:bg-white/[0.05] hover:text-foreground">
                   <Share2 className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Share</TooltipContent>
+              <TooltipContent className="border-white/10 bg-card/95 backdrop-blur-xl">Share</TooltipContent>
             </Tooltip>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                <Button variant="ghost" size="icon" className="text-muted-foreground/60 hover:bg-white/[0.05] hover:text-foreground">
                   <Download className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="border-glass-border bg-popover/95 backdrop-blur-xl">
-                <DropdownMenuItem>Download as .{activeDocument}</DropdownMenuItem>
-                <DropdownMenuItem>Download as PDF</DropdownMenuItem>
-                <DropdownMenuItem>Export to Google Drive</DropdownMenuItem>
+              <DropdownMenuContent align="end" className="border-white/[0.08] bg-card/95 backdrop-blur-2xl">
+                <DropdownMenuItem className="focus:bg-white/[0.05]">Download as .{activeDocument}</DropdownMenuItem>
+                <DropdownMenuItem className="focus:bg-white/[0.05]">Download as PDF</DropdownMenuItem>
+                <DropdownMenuItem className="focus:bg-white/[0.05]">Export to Cloud</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -219,7 +227,7 @@ export function Toolbar({ activeDocument, sidebarOpen, setSidebarOpen, rightPane
               variant="ghost"
               size="icon"
               onClick={() => setRightPanelOpen(!rightPanelOpen)}
-              className="hidden text-muted-foreground hover:text-foreground lg:flex"
+              className="hidden text-muted-foreground/60 hover:bg-white/[0.05] hover:text-foreground lg:flex"
             >
               <PanelRight className="h-4 w-4" />
             </Button>
@@ -227,15 +235,15 @@ export function Toolbar({ activeDocument, sidebarOpen, setSidebarOpen, rightPane
             {/* More Options */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                <Button variant="ghost" size="icon" className="text-muted-foreground/60 hover:bg-white/[0.05] hover:text-foreground">
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="border-glass-border bg-popover/95 backdrop-blur-xl">
-                <DropdownMenuItem>Print</DropdownMenuItem>
-                <DropdownMenuItem>Version History</DropdownMenuItem>
-                <DropdownMenuItem>Document Details</DropdownMenuItem>
-                <DropdownMenuItem>Keyboard Shortcuts</DropdownMenuItem>
+              <DropdownMenuContent align="end" className="border-white/[0.08] bg-card/95 backdrop-blur-2xl">
+                <DropdownMenuItem className="focus:bg-white/[0.05]">Print</DropdownMenuItem>
+                <DropdownMenuItem className="focus:bg-white/[0.05]">Version History</DropdownMenuItem>
+                <DropdownMenuItem className="focus:bg-white/[0.05]">Document Details</DropdownMenuItem>
+                <DropdownMenuItem className="focus:bg-white/[0.05]">Keyboard Shortcuts</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -249,18 +257,18 @@ export function Toolbar({ activeDocument, sidebarOpen, setSidebarOpen, rightPane
               <Button
                 variant="ghost"
                 size="sm"
-                className="hidden gap-1 text-muted-foreground hover:text-foreground md:flex"
+                className="hidden gap-1 text-muted-foreground/70 hover:bg-white/[0.05] hover:text-foreground md:flex"
               >
                 <span className="w-24 truncate text-left">Inter</span>
                 <ChevronDown className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="border-glass-border bg-popover/95 backdrop-blur-xl">
-              <DropdownMenuItem>Inter</DropdownMenuItem>
-              <DropdownMenuItem>Arial</DropdownMenuItem>
-              <DropdownMenuItem>Times New Roman</DropdownMenuItem>
-              <DropdownMenuItem>Roboto</DropdownMenuItem>
-              <DropdownMenuItem>Open Sans</DropdownMenuItem>
+            <DropdownMenuContent className="border-white/[0.08] bg-card/95 backdrop-blur-2xl">
+              <DropdownMenuItem className="focus:bg-white/[0.05]">Inter</DropdownMenuItem>
+              <DropdownMenuItem className="focus:bg-white/[0.05]">Arial</DropdownMenuItem>
+              <DropdownMenuItem className="focus:bg-white/[0.05]">Times New Roman</DropdownMenuItem>
+              <DropdownMenuItem className="focus:bg-white/[0.05]">Roboto</DropdownMenuItem>
+              <DropdownMenuItem className="focus:bg-white/[0.05]">Open Sans</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -270,26 +278,26 @@ export function Toolbar({ activeDocument, sidebarOpen, setSidebarOpen, rightPane
               <Button
                 variant="ghost"
                 size="sm"
-                className="hidden gap-1 text-muted-foreground hover:text-foreground md:flex"
+                className="hidden gap-1 text-muted-foreground/70 hover:bg-white/[0.05] hover:text-foreground md:flex"
               >
                 <span>12</span>
                 <ChevronDown className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="border-glass-border bg-popover/95 backdrop-blur-xl">
+            <DropdownMenuContent className="border-white/[0.08] bg-card/95 backdrop-blur-2xl">
               {[8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 72].map((size) => (
-                <DropdownMenuItem key={size}>{size}</DropdownMenuItem>
+                <DropdownMenuItem key={size} className="focus:bg-white/[0.05]">{size}</DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Separator orientation="vertical" className="mx-1 hidden h-6 bg-glass-border md:block" />
+          <Separator orientation="vertical" className="mx-1 hidden h-6 bg-white/[0.08] md:block" />
 
           {/* Tool Groups */}
           {tools.map((group, groupIndex) => (
             <div key={group.group} className="flex items-center">
               {groupIndex > 0 && (
-                <Separator orientation="vertical" className="mx-1 h-6 bg-glass-border" />
+                <Separator orientation="vertical" className="mx-1 h-6 bg-white/[0.08]" />
               )}
               <div className="flex items-center gap-0.5">
                 {group.items.map((tool) => (
@@ -298,15 +306,15 @@ export function Toolbar({ activeDocument, sidebarOpen, setSidebarOpen, rightPane
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:bg-glass-hover hover:text-foreground"
+                        className="h-8 w-8 text-muted-foreground/60 hover:bg-white/[0.08] hover:text-foreground"
                       >
                         <tool.icon className="h-4 w-4" />
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>
+                    <TooltipContent className="border-white/10 bg-card/95 backdrop-blur-xl">
                       {tool.label}
                       {tool.shortcut && (
-                        <span className="ml-2 text-muted-foreground">{tool.shortcut}</span>
+                        <span className="ml-2 text-muted-foreground/60">{tool.shortcut}</span>
                       )}
                     </TooltipContent>
                   </Tooltip>
