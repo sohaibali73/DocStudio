@@ -13,7 +13,7 @@ import {
   ChevronLeft,
   Sparkles,
   Search,
-  Cloud,
+
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -173,22 +173,7 @@ export function Sidebar({ isOpen, onToggle, activeDocument, setActiveDocument }:
             </div>
           </div>
 
-          {/* Storage Info */}
-          <div
-            className={cn(
-              "mt-auto rounded-xl border border-white/[0.06] bg-white/[0.02] p-4",
-              !isOpen && "lg:hidden"
-            )}
-          >
-            <div className="mb-3 flex items-center gap-2">
-              <Cloud className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium text-foreground">Cloud Storage</span>
-            </div>
-            <div className="mb-2 h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
-              <div className="h-full w-[16%] rounded-full bg-gradient-to-r from-primary to-primary/60" />
-            </div>
-            <p className="text-xs text-muted-foreground/60">2.4 GB of 15 GB used</p>
-          </div>
+
         </div>
       </aside>
 
