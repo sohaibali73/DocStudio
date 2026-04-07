@@ -98,16 +98,6 @@ export function Sidebar({ isOpen, onToggle, activeDocument, setActiveDocument }:
             </div>
           </div>
         </div>
-            size="icon"
-            onClick={onToggle}
-            className={cn(
-              "shrink-0 text-muted-foreground/50 hover:bg-white/[0.05] hover:text-foreground",
-              !isOpen && "lg:hidden"
-            )}
-          >
-            <ChevronLeft className={cn("h-4 w-4 transition-transform", !isOpen && "rotate-180")} />
-          </Button>
-        </div>
 
         <div className="relative flex flex-1 flex-col overflow-hidden px-3">
           {/* Search */}
