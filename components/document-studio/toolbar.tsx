@@ -132,7 +132,7 @@ const documentTools = {
 
 export function Toolbar({ 
   activeDocument, 
-  document, 
+  document,
   sidebarOpen, 
   setSidebarOpen, 
   rightPanelOpen, 
@@ -145,7 +145,7 @@ export function Toolbar({
     <div className="flex flex-col border-b border-white/[0.04] bg-gradient-to-r from-white/[0.02] via-white/[0.015] to-white/[0.02] backdrop-blur-2xl">
       {/* Top Bar */}
       <div className="flex h-14 items-center justify-between gap-4 px-4">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 min-w-0">
           {/* Panel Toggle - Desktop */}
           <Tooltip>
             <TooltipTrigger asChild>
@@ -153,7 +153,7 @@ export function Toolbar({
                 variant="ghost"
                 size="icon"
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="hidden text-muted-foreground/50 hover:bg-white/[0.04] hover:text-foreground lg:flex"
+                className="hidden text-muted-foreground/50 hover:bg-white/[0.04] hover:text-foreground lg:flex flex-shrink-0"
               >
                 <PanelLeft className="h-4 w-4" />
               </Button>
@@ -163,7 +163,7 @@ export function Toolbar({
 
           {/* Document Type Badge */}
           <div className={cn(
-            "flex items-center gap-2 rounded-lg border border-white/[0.06] px-3 py-1.5",
+            "flex items-center gap-2 rounded-lg border border-white/[0.06] px-3 py-1.5 flex-shrink-0",
             info.bgColor
           )}>
             <info.icon className={cn("h-4 w-4", info.color)} />
@@ -171,17 +171,17 @@ export function Toolbar({
           </div>
 
           {/* Document Title */}
-          <div className="hidden md:block">
-            <h1 className="text-sm font-medium text-foreground">{document.title}</h1>
+          <div className="hidden md:block min-w-0">
+            <h1 className="text-sm font-medium text-foreground truncate">{document?.title || "Untitled"}</h1>
             <div className="flex items-center gap-2 text-xs text-muted-foreground/50">
-              {document.isProcessing ? (
+              {document?.isProcessing ? (
                 <>
-                  <Loader2 className="h-3 w-3 animate-spin text-primary" />
+                  <Loader2 className="h-3 w-3 animate-spin text-primary flex-shrink-0" />
                   <span>Processing...</span>
                 </>
-              ) : document.lastSaved ? (
+              ) : document?.lastSaved ? (
                 <>
-                  <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+                  <CheckCircle2 className="h-3 w-3 text-emerald-400 flex-shrink-0" />
                   <span>Saved</span>
                 </>
               ) : (
@@ -192,9 +192,9 @@ export function Toolbar({
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-shrink-0">
           {/* Compliance Score */}
-          {document.complianceScore !== null && (
+          {document && document.complianceScore !== null && (
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className={cn(

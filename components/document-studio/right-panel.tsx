@@ -71,17 +71,18 @@ export function RightPanel({ isOpen, onToggle, activeTab, setActiveTab, activeDo
     <>
       <aside
         className={cn(
-          "fixed right-0 top-0 z-40 flex h-full flex-col transition-all duration-300 lg:relative",
+          "hidden lg:flex fixed lg:relative right-0 top-0 z-40 lg:z-0 flex-col transition-all duration-300",
           "border-l border-white/[0.04] backdrop-blur-2xl",
           "bg-gradient-to-b from-white/[0.04] via-white/[0.02] to-transparent",
-          isOpen ? "w-80 translate-x-0" : "w-0 translate-x-full"
+          "h-screen lg:h-full w-80",
+          "flex-shrink-0"
         )}
       >
         {/* Inner glow */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-bl from-primary/[0.02] via-transparent to-transparent" />
         
         {/* Header */}
-        <div className="relative flex h-16 items-center justify-between border-b border-white/[0.04] px-4">
+        <div className="relative flex h-16 items-center justify-between border-b border-white/[0.04] px-4 flex-shrink-0">
           <div className="flex items-center gap-1 rounded-lg bg-white/[0.03] p-1">
             {tabs.map((tab) => (
               <Button
@@ -99,18 +100,10 @@ export function RightPanel({ isOpen, onToggle, activeTab, setActiveTab, activeDo
               </Button>
             ))}
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onToggle}
-            className="h-8 w-8 text-muted-foreground/50 hover:bg-white/[0.04] hover:text-foreground lg:hidden"
-          >
-            <X className="h-4 w-4" />
-          </Button>
         </div>
 
         {/* Content */}
-        <ScrollArea className="relative flex-1">
+        <ScrollArea className="relative flex-1 overflow-hidden">
           {activeTab === "ai" && <AIPanel />}
           {activeTab === "compliance" && <CompliancePanel />}
           {activeTab === "files" && <FilesPanel />}
@@ -118,10 +111,62 @@ export function RightPanel({ isOpen, onToggle, activeTab, setActiveTab, activeDo
         </ScrollArea>
       </aside>
 
+      {/* Mobile Right Panel Overlay */}
+      {isOpen && (
+        <aside
+          className={cn(
+            "fixed right-0 top-0 z-50 flex h-full flex-col lg:hidden transition-all duration-300",
+            "border-l border-white/[0.04] backdrop-blur-2xl",
+            "bg-gradient-to-b from-white/[0.04] via-white/[0.02] to-transparent",
+            "w-80"
+          )}
+        >
+          {/* Inner glow */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-bl from-primary/[0.02] via-transparent to-transparent" />
+          
+          {/* Header */}
+          <div className="relative flex h-16 items-center justify-between border-b border-white/[0.04] px-4 flex-shrink-0">
+            <div className="flex items-center gap-1 rounded-lg bg-white/[0.03] p-1">
+              {tabs.map((tab) => (
+                <Button
+                  key={tab.id}
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setActiveTab(tab.id)}
+                  className={cn(
+                    "gap-1.5 px-2 text-muted-foreground/50 hover:bg-white/[0.04] hover:text-foreground",
+                    activeTab === tab.id && "bg-white/[0.06] text-foreground"
+                  )}
+                >
+                  <tab.icon className="h-3.5 w-3.5" />
+                  <span className="hidden text-xs sm:inline">{tab.label}</span>
+                </Button>
+              ))}
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onToggle}
+              className="h-8 w-8 text-muted-foreground/50 hover:bg-white/[0.04] hover:text-foreground"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* Content */}
+          <ScrollArea className="relative flex-1 overflow-hidden">
+            {activeTab === "ai" && <AIPanel />}
+            {activeTab === "compliance" && <CompliancePanel />}
+            {activeTab === "files" && <FilesPanel />}
+            {activeTab === "settings" && <SettingsPanel />}
+          </ScrollArea>
+        </aside>
+      )}
+
       {/* Mobile Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden"
           onClick={onToggle}
         />
       )}
