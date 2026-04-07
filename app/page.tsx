@@ -45,7 +45,7 @@ export default function PotomacStudio() {
     <TooltipProvider delayDuration={200}>
       <div className="flex h-screen w-full overflow-hidden bg-background">
         {/* Ambient background effects */}
-        <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="pointer-events-none fixed inset-0 overflow-hidden z-0">
           {/* Primary glow - Potomac teal */}
           <div className="absolute -left-64 -top-64 h-[700px] w-[700px] rounded-full bg-primary/[0.07] blur-[150px]" />
           {/* Secondary glow */}
@@ -55,6 +55,9 @@ export default function PotomacStudio() {
           {/* Noise texture overlay */}
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMC4wMjUiLz48L3N2Zz4=')] opacity-60" />
         </div>
+
+        {/* Content Layer */}
+        <div className="relative z-10 flex h-full w-full overflow-hidden">
 
         {/* Mobile Navigation */}
         <MobileNav
@@ -103,6 +106,7 @@ export default function PotomacStudio() {
           setActiveTab={setRightPanelTab}
           activeDocument={activeDocument}
         />
+        </div>
       </div>
     </TooltipProvider>
   );
