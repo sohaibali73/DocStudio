@@ -14,8 +14,8 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: 'DocStudio - AI-Powered Document Creation',
-  description: 'Create stunning documents, presentations, and spreadsheets with AI assistance',
+  title: 'Potomac Studio - AI-Powered Document Creation',
+  description: 'Create brand-compliant documents, presentations, and spreadsheets with AI assistance and automated compliance checking',
   generator: 'v0.app',
   icons: {
     icon: [
